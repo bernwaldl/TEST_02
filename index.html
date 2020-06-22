@@ -1,21 +1,96 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 
 <head>
-    <title>Parcel Sandbox</title>
     <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>TEST_02</title>
+    <link rel="stylesheet" href="style.css" />
+
+
 </head>
 
 <body>
-    <div id="app">
-    </div>
+    <main>
 
-    <script src="src/index.js"></script>
-    <script src="https://github.com/Jam3/load-bmfont.git"></script>
-    <script src="https://github.com/vanruesc/postprocessing.git"></script>
-    <script src="https://github.com/mrdoob/three.js.git"></script>
-    <script src="https://github.com/Jam3/three-bmfont-text.git"></script>
-    
-</body>
 
-</html>
+        <div class="slider">
+            <div id="rgbKineticSlider" class="rgbKineticSlider"></div>
+            <div id="info">SWIPE to the left
+            </div>
+        </div>
+        <div class="bottom-container">
+            <a class="footer-link" href="https://burial98.github.io/INFO_02/">info</a>
+
+        </div>
+        <div class="float">
+            <div id="main"></div>
+        </div>
+
+
+    </main>
+
+    <!-- TweenMax -->
+    <script src="https://cdn.jsdelivr.net/gh/hmongouachon/rgbKineticSlider/js/libs/TweenMax.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/hmongouachon/rgbKineticSlider/js/libs/imagesLoaded.pkgd.min.js"></script>
+
+    <!-- Pixi JS -->
+    <script src="https://cdn.jsdelivr.net/gh/hmongouachon/rgbKineticSlider/js/libs/pixi.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/gh/hmongouachon/rgbKineticSlider/js/libs/pixi-filters.min.js"></script>
+
+    <!-- Slider Plugin -->
+    <script src="https://cdn.jsdelivr.net/gh/hmongouachon/rgbKineticSlider/js/rgbKineticSlider.js"></script>
+
+    <script src="https://code.jquery.com/jquery-3.5.1.min.js"></script>
+
+
+    <script>
+        $("#info").delay(8000).fadeOut(500);
+    </script>
+
+
+    <script>
+        const images = ["CAPTCHA_01.png", "CAPTCHA_03.png", "CAPTCHA_02.png"];
+        const texts = [
+            ["UNLOCKED"],
+            ["OFFBEAT"],
+            ["ASTERISKS"],
+               ["ASTERISKS"],
+               ["ASTERISKS"],
+               ["ASTERISKS"],
+               ["ASTERISKS"]
+        ];
+
+        rgbKineticSlider = new rgbKineticSlider({
+            slideImages: images,
+            itemsTitles: texts,
+
+            backgroundDisplacementSprite: "http://hmongouachon.com/_demos/rgbKineticSlider/map-9.jpg",
+            cursorDisplacementSprite: "http://hmongouachon.com/_demos/rgbKineticSlider/displace-circle.png",
+            cursorScaleIntensity: 1,
+            cursorMomentum: 0.14,
+
+            swipe: true,
+            swipeDistance: window.innerWidth * 0.4,
+            swipeScaleIntensity: 2,
+
+            slideTransitionDuration: 0.8,
+            transitionScaleIntensity: 30,
+            transitionScaleAmplitude: 160,
+
+            nav: true,
+            navElement: ".main-nav",
+
+            imagesRgbEffect: false,
+            imagesRgbIntensity: 4,
+            navImagesRgbIntensity: 120,
+
+            textsDisplay: false,
+            textTitleSize: 144,
+            textsTiltEffect: true,
+            googleFonts: ["Playfair Display:400"],
+            textsRgbEffect: true,
+            textsRgbIntensity: 1,
+        });
+    </script>
+</body></html>
