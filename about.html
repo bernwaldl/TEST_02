@@ -1,0 +1,216 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <title>INFO_01</title>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, user-scalable=no, minimum-scale=1.0, maximum-scale=1.0">
+    <link type="text/css" rel="stylesheet" href="about.css">
+</head>
+
+<body>
+
+
+    <div class="slider">
+        <div id="rgbKineticSlider" class="rgbKineticSlider"></div>
+        <div class="info"><span class="CAPTCHA">CAPTCHA</span> is short for "Completely Automated Public Turing Test to Tell Computers and Humans Apart" and is basically a program created with the purpose to sort out if the user is a person or a machine. This project strives to explore what it means to be human in a world were it’s not so clear anymore if somebody is a person or a computer.
+            <p>
+                <br>
+                You are in a direct one-way dialog with a CAPTCHA program. What would it ask you and more important: what would you answer?
+            </p>
+            <p>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+                <br>
+
+                Concept and Development by Alexander Vieten<br>
+                with help by the incredible work of Mr.doob.
+            </p>
+        </div>
+    </div>
+    
+    <div class="bottom-container">
+            <a class="footer-link" href="./">back</a>
+
+        </div>
+
+    <script type="x-shader/x-vertex" id="vertexShader">
+
+        attribute vec3 center;
+			varying vec3 vCenter;
+
+			void main() {
+
+				vCenter = center;
+
+				gl_Position = projectionMatrix * modelViewMatrix * vec4( position, 1.0 );
+
+			}
+
+		</script>
+
+    <script type="x-shader/x-fragment" id="fragmentShader">
+
+        uniform float widthFactor;
+
+			varying vec3 vCenter;
+
+			float edgeFactorTri() {
+
+				vec3 d = fwidth( vCenter.xyz );
+
+				vec3 a3 = smoothstep( vec3( 0.0 ), d * widthFactor, vCenter.xyz );
+
+				return min( min( a3.x, a3.y ), a3.z );
+
+			}
+
+			void main() {
+
+				if ( edgeFactorTri() > 0.99 ) discard;
+
+				gl_FragColor = gl_FrontFacing ? vec4( 0.9, 0.9, 1.0, 1.0 ) : vec4( 0.4, 0.4, 0.5, 1.0 );
+
+			}
+
+		</script>
+
+    <script type="module">
+
+        import * as THREE from './three.module.js';
+
+			var API = {
+				widthFactor: 1
+			};
+
+			var renderer, scene, camera, mesh1, mesh2;
+
+			init();
+      
+
+
+			function init() {
+
+				renderer = new THREE.WebGLRenderer( { antialias: true } );
+				renderer.setPixelRatio( window.devicePixelRatio );
+				renderer.setSize( window.innerWidth, window.innerHeight );
+                renderer.setClearColor( 0xffffff );
+				document.body.appendChild( renderer.domElement );
+
+				scene = new THREE.Scene();
+
+				camera = new THREE.PerspectiveCamera( 12, window.innerWidth / window.innerHeight, 1, 500 );
+				camera.position.z = 150;
+
+				new THREE.BufferGeometryLoader().load( './lee-perry-smith-head-scan.json', function ( geometry ) {
+
+					// on the left
+
+					var material = new THREE.MeshBasicMaterial( {
+
+						color: 0x000000,
+						wireframe: true,
+                        wireframeLinewidth: 1
+
+					} );
+
+					mesh1 = new THREE.Mesh( geometry, material );
+					mesh1.position.set(  12, 0, 0 );
+
+					scene.add( mesh1 );
+
+					// on the right
+
+					var uniforms = { 'widthFactor': { value: API.widthFactor } };
+
+					var material = new THREE.ShaderMaterial( {
+
+						uniforms: uniforms,
+						vertexShader: document.getElementById( 'vertexShader' ).textContent,
+						fragmentShader: document.getElementById( 'fragmentShader' ).textContent,
+						side: THREE.DoubleSide
+
+					} );
+
+					material.extensions.derivatives = true;
+
+					geometry.deleteAttribute( 'normal' );
+					geometry.deleteAttribute( 'uv' );
+
+					setupAttributes( geometry );
+
+				
+			
+
+					//
+
+					animate();
+
+				} );
+
+				//
+
+		
+
+				window.addEventListener( 'resize', onWindowResize, false );
+
+			}
+
+			function setupAttributes( geometry ) {
+
+				var vectors = [
+					new THREE.Vector3( 1, 0, 0 ),
+					new THREE.Vector3( 0, 1, 0 ),
+					new THREE.Vector3( 0, 0, 1 )
+				];
+
+				var position = geometry.attributes.position;
+				var centers = new Float32Array( position.count * 3 );
+
+				for ( var i = 0, l = position.count; i < l; i ++ ) {
+
+					vectors[ i % 3 ].toArray( centers, i * 3 );
+
+				}
+
+				geometry.setAttribute( 'center', new THREE.BufferAttribute( centers, 3 ) );
+
+			}
+
+    
+			function animate() {
+
+				requestAnimationFrame( animate );
+
+				mesh1.rotation.y += 0.002;
+
+
+				renderer.render( scene, camera );
+
+			}
+
+		</script>
+
+</body></html>
